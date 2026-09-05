@@ -1,9 +1,9 @@
 Social Media Posts images
 
 Put your images in this folder using these simple names:
-social01.png
-social02.png
-social03.png
+social01.webp
+social02.webp
+social03.webp
 ...
 
 The website is prepared for up to 30 images. Missing numbers are ignored.

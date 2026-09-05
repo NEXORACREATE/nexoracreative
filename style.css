@@ -3622,3 +3622,222 @@ a {
         aspect-ratio: 16 / 10;
     }
 }
+
+/* ========================================
+   PERFORMANCE + CROSS-DEVICE HARDENING
+   These rules preserve the existing visual design
+   while making the layout resilient on small phones,
+   tablets, foldables, laptops and ultra-wide displays.
+======================================== */
+
+html {
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    min-width: 280px;
+}
+
+img,
+video,
+canvas {
+    max-width: 100%;
+}
+
+/* WebP thumbnails are real content, so they occupy their
+   final box from the first paint and never flash blank. */
+.work-image-placeholder {
+    position: relative;
+}
+
+.work-image-placeholder .work-thumbnail {
+    z-index: 0;
+}
+
+.work-image-placeholder .work-thumbnail-overlay {
+    z-index: 1;
+}
+
+/* Keep the service arrow visually identical across platforms.
+   The icon is SVG rather than a text glyph, preventing mobile
+   emoji substitution. */
+.service-row-arrow {
+    line-height: 0;
+    flex-shrink: 0;
+}
+
+.service-arrow-icon {
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-arrow-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Safe-area support for devices with notches/cutouts. */
+.navbar {
+    padding-left: max(5%, env(safe-area-inset-left));
+    padding-right: max(5%, env(safe-area-inset-right));
+}
+
+.content-screen {
+    padding-left: max(5%, env(safe-area-inset-left));
+    padding-right: max(5%, env(safe-area-inset-right));
+}
+
+/* Fluid spacing on very large screens without allowing content
+   to become uncomfortably stretched. */
+.navbar,
+.content-screen {
+    padding-top: clamp(18px, 2vw, 30px);
+}
+
+@media (min-width: 1600px) {
+    .nav-container,
+    .content-container,
+    .work-grid,
+    .portfolio-modal-inner,
+    .video-preview-modal-inner {
+        max-width: 1600px;
+    }
+}
+
+@media (min-width: 2200px) {
+    .nav-container,
+    .content-container,
+    .work-grid,
+    .portfolio-modal-inner,
+    .video-preview-modal-inner {
+        max-width: 1800px;
+    }
+}
+
+/* Phones, compact tablets and foldable outer displays. */
+@media (max-width: 600px) {
+    .navbar {
+        padding-top: max(18px, env(safe-area-inset-top));
+        padding-left: max(6%, env(safe-area-inset-left));
+        padding-right: max(6%, env(safe-area-inset-right));
+    }
+
+    .content-screen {
+        padding-left: max(6%, env(safe-area-inset-left));
+        padding-right: max(6%, env(safe-area-inset-right));
+    }
+
+    .hero-screen,
+    .animation-layer {
+        height: 100svh;
+    }
+
+    .main-experience {
+        min-height: 100svh;
+    }
+
+    /* Keep the service CTA available on mobile and use the
+       same circular treatment as desktop. */
+    .service-row {
+        grid-template-columns: 35px minmax(0, 1fr) 45px;
+        gap: 15px;
+    }
+
+    .service-row-arrow {
+        display: flex;
+        width: 45px;
+        height: 45px;
+    }
+
+    .service-arrow-icon {
+        width: 19px;
+        height: 19px;
+    }
+
+    .hero-content,
+    .about-content,
+    .contact-content,
+    .services-header,
+    .work-header {
+        min-width: 0;
+    }
+
+    .hero-content h1,
+    .content-screen h2,
+    .about-content h2 {
+        overflow-wrap: anywhere;
+    }
+}
+
+/* Small-height landscape phones/tablets. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .navbar {
+        padding-top: max(12px, env(safe-area-inset-top));
+        padding-bottom: 12px;
+    }
+
+    .hero-content {
+        top: 54%;
+        max-height: 78svh;
+        overflow: auto;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(32px, 7vw, 58px);
+    }
+
+    .hero-badge {
+        margin-bottom: 12px;
+    }
+
+    .hero-buttons {
+        gap: 8px;
+    }
+}
+
+/* Very narrow screens: avoid horizontal pressure without changing
+   the normal desktop/mobile visual language. */
+@media (max-width: 340px) {
+    .navbar {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .logo {
+        gap: 6px;
+        font-size: 16px;
+    }
+
+    .nav-button {
+        padding-left: 11px;
+        padding-right: 11px;
+    }
+
+    .service-row {
+        grid-template-columns: 28px minmax(0, 1fr) 42px;
+        gap: 10px;
+    }
+
+    .service-row-arrow {
+        width: 42px;
+        height: 42px;
+    }
+}
+
+/* Reduce browser work on images that are not yet visible while
+   retaining the existing layout and scroll-trigger behavior. */
+@media (prefers-reduced-motion: no-preference) {
+    .work-thumbnail {
+        backface-visibility: hidden;
+    }
+}

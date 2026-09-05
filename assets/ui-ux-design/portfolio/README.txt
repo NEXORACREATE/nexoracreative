@@ -1,9 +1,9 @@
 UI & UX Design images
 
 Put your images in this folder using these simple names:
-ui01.png
-ui02.png
-ui03.png
+ui01.webp
+ui02.webp
+ui03.webp
 ...
 
 The website is prepared for up to 30 images. Missing numbers are ignored.

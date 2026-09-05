@@ -41,7 +41,7 @@
 
     <meta
         property="og:image"
-        content="assets/about-portrait.png"
+        content="assets/about-portrait.webp"
     >
 
     <meta
@@ -66,8 +66,11 @@
 
     <meta
         name="twitter:image"
-        content="assets/about-portrait.png"
+        content="assets/about-portrait.webp"
     >
+
+    <!-- Favicon: place your 512x512 logo at assets/favicon.webp -->
+    <link rel="icon" type="image/webp" href="assets/favicon.webp">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -76,6 +79,8 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap"
         rel="stylesheet"
     >
+
+    <link rel="preload" as="image" href="assets/frames/scene00001.webp" fetchpriority="high">
 
     <link rel="stylesheet" href="style.css">
 
@@ -93,7 +98,7 @@
 
         <div class="nav-container">
 
-            <a href="#" class="logo" aria-label="Nexora Creative home">
+            <a href="#home" class="logo" aria-label="Nexora Creative home">
                 <span class="logo-mark" aria-hidden="true">
                     <img src="assets/logo.svg" alt="" onerror="this.style.display='none'; this.parentElement.classList.add('logo-mark-empty');">
                 </span>
@@ -174,7 +179,7 @@
      MAIN SCROLL EXPERIENCE
 ========================================= -->
 
-<main class="main-experience">
+<main class="main-experience" id="home">
 
 
     <!-- ====================================
@@ -310,9 +315,14 @@
         <div class="work-placeholder work-image-placeholder">
 
             <img
-                src="assets/branding/brandthumb.png"
+                src="assets/branding/brandthumb.webp"
                 alt="Roast & Root branding case study"
                 class="work-thumbnail"
+                loading="lazy"
+                decoding="async"
+                fetchpriority="low"
+                width="1400"
+                height="600"
             >
 
             <div class="work-thumbnail-overlay">
@@ -352,9 +362,14 @@
         <div class="work-placeholder work-image-placeholder">
 
             <img
-                src="assets/promotional-ads/adthumb.png"
+                src="assets/promotional-ads/adthumb.webp"
                 alt="Promotional Ads portfolio"
                 class="work-thumbnail"
+                loading="lazy"
+                decoding="async"
+                fetchpriority="low"
+                width="1400"
+                height="600"
             >
 
             <div class="work-thumbnail-overlay">
@@ -391,7 +406,19 @@
         aria-label="Open Social Media Posts portfolio"
     >
 
-        <div class="work-placeholder">
+        <div class="work-placeholder work-image-placeholder">
+
+            <img
+                src="assets/social-media-posts/socialthumb.webp"
+                alt="Social Media Posts portfolio"
+                class="work-thumbnail"
+                loading="lazy"
+                decoding="async"
+                width="688"
+                height="430"
+            >
+
+            <div class="work-thumbnail-overlay">
 
             <span>03</span>
 
@@ -405,6 +432,8 @@
 
             <div class="folder-arrow">
                 ↗
+            </div>
+
             </div>
 
         </div>
@@ -423,7 +452,19 @@
         aria-label="Open Campaign Visuals portfolio"
     >
 
-        <div class="work-placeholder">
+        <div class="work-placeholder work-image-placeholder">
+
+            <img
+                src="assets/campaign-visuals/campthumb.webp"
+                alt="Campaign Visuals portfolio"
+                class="work-thumbnail"
+                loading="lazy"
+                decoding="async"
+                width="688"
+                height="430"
+            >
+
+            <div class="work-thumbnail-overlay">
 
             <span>04</span>
 
@@ -437,6 +478,8 @@
 
             <div class="folder-arrow">
                 ↗
+            </div>
+
             </div>
 
         </div>
@@ -453,7 +496,19 @@
         aria-label="Open Thumbnails portfolio"
     >
 
-        <div class="work-placeholder">
+        <div class="work-placeholder work-image-placeholder">
+
+            <img
+                src="assets/thumbnails/thumbthumb.webp"
+                alt="Thumbnails portfolio"
+                class="work-thumbnail"
+                loading="lazy"
+                decoding="async"
+                width="1400"
+                height="600"
+            >
+
+            <div class="work-thumbnail-overlay">
 
             <span>05</span>
 
@@ -467,6 +522,8 @@
 
             <div class="folder-arrow">
                 ↗
+            </div>
+
             </div>
 
         </div>
@@ -485,7 +542,19 @@
         aria-label="Open Video & Motion portfolio"
     >
 
-        <div class="work-placeholder">
+        <div class="work-placeholder work-image-placeholder">
+
+            <img
+                src="assets/video-design/videothumb.webp"
+                alt="Video & Motion portfolio"
+                class="work-thumbnail"
+                loading="lazy"
+                decoding="async"
+                width="1400"
+                height="600"
+            >
+
+            <div class="work-thumbnail-overlay">
 
             <span>06</span>
 
@@ -499,6 +568,8 @@
 
             <div class="folder-arrow">
                 ↗
+            </div>
+
             </div>
 
         </div>
@@ -568,7 +639,11 @@
                     <p>Strategic brand identities designed to build recognition, communicate personality and create a strong visual presence.</p>
                 </div>
 
-                <button class="service-row-arrow" type="button" aria-label="Ask about Branding" data-service="Branding">↗</button>
+                <button class="service-row-arrow" type="button" aria-label="Ask about Branding" data-service="Branding"><span class="service-arrow-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M5 19L19 5M9 5h10v10" />
+                        </svg>
+                    </span></button>
             </article>
 
             <!-- SERVICE 02 -->
@@ -580,7 +655,11 @@
                     <p>Premium promotional graphics that present products, offers and campaigns in a way that demands attention.</p>
                 </div>
 
-                <button class="service-row-arrow" type="button" aria-label="Ask about Promotional Ads Designing" data-service="Promotional Ads Designing">↗</button>
+                <button class="service-row-arrow" type="button" aria-label="Ask about Promotional Ads Designing" data-service="Promotional Ads Designing"><span class="service-arrow-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M5 19L19 5M9 5h10v10" />
+                        </svg>
+                    </span></button>
             </article>
 
             <!-- SERVICE 03 -->
@@ -592,7 +671,11 @@
                     <p>Scroll-stopping posts and carousel designs created to keep your brand visually consistent across social media.</p>
                 </div>
 
-                <button class="service-row-arrow" type="button" aria-label="Ask about Social Media Creatives Designing" data-service="Social Media Creatives Designing">↗</button>
+                <button class="service-row-arrow" type="button" aria-label="Ask about Social Media Creatives Designing" data-service="Social Media Creatives Designing"><span class="service-arrow-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M5 19L19 5M9 5h10v10" />
+                        </svg>
+                    </span></button>
             </article>
 
             <!-- SERVICE 04 -->
@@ -604,7 +687,11 @@
                     <p>Connected campaign visuals built around a clear concept, consistent direction and strong communication across multiple touchpoints.</p>
                 </div>
 
-                <button class="service-row-arrow" type="button" aria-label="Ask about Campaign Designing" data-service="Campaign Designing">↗</button>
+                <button class="service-row-arrow" type="button" aria-label="Ask about Campaign Designing" data-service="Campaign Designing"><span class="service-arrow-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M5 19L19 5M9 5h10v10" />
+                        </svg>
+                    </span></button>
             </article>
 
             <!-- SERVICE 05 -->
@@ -616,7 +703,11 @@
                     <p>High-impact thumbnails designed to capture attention, create curiosity and improve click-through rates.</p>
                 </div>
 
-                <button class="service-row-arrow" type="button" aria-label="Ask about Thumbnail Designing" data-service="Thumbnail Designing">↗</button>
+                <button class="service-row-arrow" type="button" aria-label="Ask about Thumbnail Designing" data-service="Thumbnail Designing"><span class="service-arrow-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M5 19L19 5M9 5h10v10" />
+                        </svg>
+                    </span></button>
             </article>
 
             <!-- SERVICE 06 -->
@@ -628,7 +719,11 @@
                     <p>Engaging video edits that communicate ideas, promote products and give your content a polished visual presence.</p>
                 </div>
 
-                <button class="service-row-arrow" type="button" aria-label="Ask about Video Editing" data-service="Video Editing">↗</button>
+                <button class="service-row-arrow" type="button" aria-label="Ask about Video Editing" data-service="Video Editing"><span class="service-arrow-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M5 19L19 5M9 5h10v10" />
+                        </svg>
+                    </span></button>
             </article>
 
         </div>
@@ -662,7 +757,7 @@
 
                 <div class="about-portrait-wrap">
                     <img
-                        src="assets/about-portrait.png"
+                        src="assets/about-portrait.webp"
                         alt="Nexora Creative"
                         class="about-portrait"
                     >
@@ -882,7 +977,7 @@
 
         <div class="footer-brand">
 
-            <a href="#" class="footer-logo">
+            <a href="#home" class="footer-logo">
                 NEXORA CREATIVE<span>.</span>
             </a>
 
@@ -995,6 +1090,7 @@
     >
 
         <button
+            type="button"
             class="service-name-modal-close"
             id="serviceNameModalClose"
             type="button"
@@ -1050,6 +1146,7 @@
     >
 
         <button
+            type="button"
             class="contact-modal-close"
             id="contactModalClose"
             aria-label="Close contact options"
@@ -1097,34 +1194,6 @@
 
 
 <!-- ========================================
-     INTRODUCTION VIDEO PREVIEW
-========================================= -->
-<div class="video-preview-modal" id="videoPreviewModal" aria-hidden="true">
-    <div class="video-preview-modal-inner" role="dialog" aria-modal="true" aria-labelledby="videoPreviewTitle">
-        <div class="portfolio-modal-header">
-            <div>
-                <span class="section-label">Introduction</span>
-                <h2 id="videoPreviewTitle">Introduction</h2>
-            </div>
-            <button class="portfolio-close" id="videoPreviewClose" type="button" aria-label="Close introduction video">×</button>
-        </div>
-        <div class="video-preview-frame">
-            <video id="introductionVideo" controls playsinline preload="metadata">
-                <source src="assets/introduction/introduction.mp4" type="video/mp4">
-                <source src="assets/introduction/introduction.webm" type="video/webm">
-                <source src="assets/introduction/introduction.ogg" type="video/ogg">
-                <source src="assets/introduction/introduction.m4v" type="video/mp4">
-                Your browser does not support the video element.
-            </video>
-            <div class="video-preview-empty" id="videoPreviewEmpty">
-                <span>INTRODUCTION VIDEO</span>
-                <p>Add your video at <strong>assets/introduction/introduction.mp4</strong></p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ========================================
      PORTFOLIO GALLERY
 ========================================= -->
 
@@ -1160,6 +1229,7 @@
 
 
             <button
+                type="button"
                 class="portfolio-close"
                 id="portfolioClose"
                 aria-label="Close portfolio"
@@ -1206,6 +1276,7 @@
         aria-label="Full quality image preview"
     >
         <button
+            type="button"
             class="image-lightbox-close"
             id="imageLightboxClose"
             aria-label="Close image preview"

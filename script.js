@@ -17,7 +17,7 @@ function getFramePath(index) {
 
     const frameNumber = String(index).padStart(5, "0");
 
-    return `assets/frames/scene${frameNumber}.png`;
+    return `assets/frames/scene${frameNumber}.webp`;
 
 }
 
@@ -26,16 +26,66 @@ function getFramePath(index) {
 // LOAD ALL FRAMES
 // ========================================
 
-const images = [];
+const images = Array.from({ length: frameCount }, () => null);
+let nextFrameToLoad = 0;
+const initialFrameBatch = 10;
+const frameLoadConcurrency = 8;
+let activeFrameLoads = 0;
 
-for (let i = 1; i <= frameCount; i++) {
+function createFrameImage(index) {
+
+    if (images[index]) return images[index];
 
     const image = new Image();
+    image.decoding = "async";
+    image.src = getFramePath(index + 1);
+    images[index] = image;
 
-    image.src = getFramePath(i);
+    return image;
+}
 
-    images.push(image);
+function loadNextFrame() {
 
+    if (nextFrameToLoad >= frameCount || activeFrameLoads >= frameLoadConcurrency) return;
+
+    const index = nextFrameToLoad++;
+    activeFrameLoads++;
+    const image = createFrameImage(index);
+
+    const done = () => {
+        activeFrameLoads--;
+        loadNextFrame();
+    };
+
+    image.addEventListener("load", done, { once: true });
+    image.addEventListener("error", done, { once: true });
+
+    // Keep the first frame immediately available; continue the remaining
+    // queue as the browser becomes idle so the page can paint quickly.
+    loadNextFrame();
+}
+
+for (let i = 0; i < Math.min(initialFrameBatch, frameCount); i++) {
+    createFrameImage(i);
+    nextFrameToLoad = i + 1;
+}
+
+if (images[0]) {
+    images[0].fetchPriority = "high";
+}
+
+for (let i = 0; i < frameLoadConcurrency; i++) loadNextFrame();
+
+const continueFrameLoading = () => {
+    while (nextFrameToLoad < frameCount && activeFrameLoads < frameLoadConcurrency) {
+        loadNextFrame();
+    }
+};
+
+if ("requestIdleCallback" in window) {
+    requestIdleCallback(continueFrameLoading, { timeout: 1200 });
+} else {
+    setTimeout(continueFrameLoading, 250);
 }
 
 
@@ -45,11 +95,26 @@ for (let i = 1; i <= frameCount; i++) {
 
 function renderFrame(frameIndex) {
 
-    const image = images[frameIndex];
+    let image = images[frameIndex];
 
-    if (!image || !image.complete) {
-        return;
+    if (!image || !image.complete || !image.naturalWidth) {
+        for (let offset = 1; offset < frameCount; offset++) {
+            const before = images[frameIndex - offset];
+            const after = images[frameIndex + offset];
+
+            if (before?.complete && before.naturalWidth) {
+                image = before;
+                break;
+            }
+
+            if (after?.complete && after.naturalWidth) {
+                image = after;
+                break;
+            }
+        }
     }
+
+    if (!image || !image.complete || !image.naturalWidth) return;
 
 
     context.clearRect(
@@ -75,15 +140,21 @@ function renderFrame(frameIndex) {
 // INITIALIZE CANVAS
 // ========================================
 
-images[0].onload = function () {
+function initializeCanvas() {
+
+    if (!images[0] || !images[0].naturalWidth) return;
 
     canvas.width = images[0].naturalWidth;
-
     canvas.height = images[0].naturalHeight;
-
     renderFrame(0);
 
-};
+}
+
+images[0].addEventListener("load", initializeCanvas, { once: true });
+
+if (images[0].complete && images[0].naturalWidth) {
+    initializeCanvas();
+}
 
 
 // ========================================
@@ -485,11 +556,9 @@ imageLightboxClose.addEventListener(
 /*
     PORTFOLIO DATA
 
-    We are intentionally leaving the
-    image arrays empty for now.
-
-    Later we will simply add your
-    real image filenames here.
+    The manifest below contains the exact media
+    shipped with the website. Keeping this explicit
+    prevents browser-side filename probing and 404s.
 */
 
 const portfolioData = {
@@ -497,175 +566,97 @@ const portfolioData = {
     "branding": {
         title: "Roast & Root — Branding Case Study",
         folder: "assets/branding/case-study/",
-        prefix: "brand",
-        thumbnail: "assets/branding/brandthumb.png",
+        media: Array.from({ length: 28 }, (_, i) => `brand${String(i + 1).padStart(2, "0")}.webp`),
+        thumbnail: "assets/branding/brandthumb.webp",
         caseStudy: true
     },
 
     "promotional-ads": {
         title: "Promotional Ads",
         folder: "assets/promotional-ads/portfolio/",
-        prefix: "ad",
-        thumbnail: "assets/promotional-ads/adthumb.png"
+        media: Array.from({ length: 10 }, (_, i) => `ad${String(i + 1).padStart(2, "0")}.webp`),
+        thumbnail: "assets/promotional-ads/adthumb.webp"
     },
 
     "social-media-posts": {
         title: "Social Media Posts",
         folder: "assets/social-media-posts/portfolio/",
-        prefix: "social",
-        thumbnail: "assets/social-media-posts/socialthumb.png"
+        media: Array.from({ length: 10 }, (_, i) => `Social${String(i + 1).padStart(2, "0")}.webp`),
+        thumbnail: "assets/social-media-posts/socialthumb.webp"
     },
 
     "campaign-visuals": {
         title: "Campaign Visuals",
         folder: "assets/campaign-visuals/portfolio/",
-        prefix: "camp",
-        thumbnail: "assets/campaign-visuals/campthumb.png"
+        media: Array.from({ length: 20 }, (_, i) => `camp${String(i + 1).padStart(2, "0")}.webp`),
+        thumbnail: "assets/campaign-visuals/campthumb.webp"
     },
 
     "thumbnails": {
         title: "Thumbnails",
         folder: "assets/thumbnails/portfolio/",
-        prefix: "thumb",
-        thumbnail: "assets/thumbnails/thumbthumb.png"
+        media: Array.from({ length: 10 }, (_, i) => `thumb${String(i + 1).padStart(2, "0")}.webp`),
+        thumbnail: "assets/thumbnails/thumbthumb.webp"
     },
 
     "video-design": {
         title: "Video & Motion",
         folder: "assets/video-design/portfolio/",
-        prefix: "video",
-        thumbnail: "assets/video-design/videothumb.png"
+        media: Array.from({ length: 5 }, (_, i) => `video${String(i + 1).padStart(2, "0")}.mp4`),
+        thumbnail: "assets/video-design/videothumb.webp"
     }
 
 };
 
 
 /* ========================================
-   AUTO-LOAD PORTFOLIO THUMBNAILS
+   PORTFOLIO CARD THUMBNAILS
 
-   Each category can have one thumbnail in
-   its main folder (outside /portfolio/).
-
-   Naming convention:
-   branding/brandthumb.png
-   promotional-ads/adthumb.png
-   social-media-posts/socialthumb.png
-   campaign-visuals/campthumb.png
-   thumbnails/thumbthumb.png
-   video-design/videothumb.png
-
-   Adding/replacing that single image is all
-   that is needed to update the card.
+   Thumbnails are present in the HTML so they can paint
+   immediately. JavaScript does not rewrite them after load,
+   which prevents blank blocks and unnecessary image swaps.
 ======================================== */
 
-function applyPortfolioThumbnails() {
+/* ========================================
+   PORTFOLIO SCROLL REVEAL
 
-    portfolioFolders.forEach(folder => {
+   Independent of image format: WebP thumbnails participate
+   in the same GSAP reveal animation as the surrounding UI.
+======================================== */
 
-        const category = folder.dataset.category;
-        const portfolio = portfolioData[category];
-
-        if (!portfolio || !portfolio.thumbnail) return;
-
-        const placeholder = folder.querySelector(
-            ".work-placeholder"
-        );
-
-        if (!placeholder) return;
-
-        const preview = new Image();
-
-        preview.onload = function () {
-
-            placeholder.classList.add(
-                "work-image-placeholder"
-            );
-
-            placeholder.innerHTML = `
-                <img
-                    src="${portfolio.thumbnail}"
-                    alt="${portfolio.title} portfolio"
-                    class="work-thumbnail"
-                >
-
-                <div class="work-thumbnail-overlay">
-
-                    <span>${folder.querySelector(".work-placeholder > span")?.textContent.trim() || ""}</span>
-
-                    <h3>
-                        ${folder.querySelector(".work-placeholder h3")?.textContent.trim() || portfolio.title}
-                    </h3>
-
-                    <p>
-                        View Collection
-                    </p>
-
-                    <div class="folder-arrow">
-                        ↗
-                    </div>
-
-                </div>
-            `;
-
-        };
-
-        // If the thumbnail is not present, the original placeholder
-        // remains untouched.
-        preview.onerror = function () {};
-        preview.src = portfolio.thumbnail;
-
+if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+    gsap.utils.toArray(".portfolio-folder").forEach((card, index) => {
+        gsap.from(card, {
+            opacity: 0,
+            y: 55,
+            duration: 0.9,
+            delay: Math.min(index * 0.08, 0.35),
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: card,
+                start: "top 88%",
+                toggleActions: "play none none reverse"
+            }
+        });
     });
-
 }
-
-applyPortfolioThumbnails();
 
 
 /* ========================================
-   BUILD IMAGE LIST
+   BUILD PORTFOLIO MEDIA
 
-   Simple filenames:
-   brand01, ad01, social01, camp01,
-   ui01, thumb01, video01
-
-   No spaces, hyphens or underscores are needed.
+   Uses the exact files shipped with the site.
+   This avoids hundreds of unnecessary 404
+   requests from extension/file-name guessing.
 ======================================== */
 
 function buildPortfolioMedia(portfolio) {
 
-    const media = [];
-
-    const imageExtensions = [
-        ".png", ".jpg", ".jpeg", ".webp", ".gif", ".avif", ".svg"
-    ];
-
-    const videoExtensions = [
-        ".mp4", ".webm", ".ogg", ".ogv", ".m4v"
-    ];
-
-    for (let index = 1; index <= 30; index++) {
-
-        const number = String(index).padStart(2, "0");
-        const base = `${portfolio.folder}${portfolio.prefix}${number}`;
-
-        imageExtensions.forEach(extension => {
-            media.push({
-                src: base + extension,
-                type: "image",
-                title: portfolio.title
-            });
-        });
-
-        videoExtensions.forEach(extension => {
-            media.push({
-                src: base + extension,
-                type: "video",
-                title: portfolio.title
-            });
-        });
-    }
-
-    return media;
+    return (portfolio.media || []).map(filename => ({
+        src: portfolio.folder + filename,
+        type: /\.(mp4|webm|ogg|ogv|m4v)$/i.test(filename) ? "video" : "image",
+        title: portfolio.title
+    }));
 }
 
 /* ========================================
@@ -722,6 +713,9 @@ function openPortfolioFolder(category, trigger) {
         } else {
             element = document.createElement("img");
             element.alt = item.title;
+            element.loading = "lazy";
+            element.decoding = "async";
+            element.fetchPriority = "low";
             element.className = portfolio.caseStudy
                 ? "gallery-image gallery-case-study"
                 : "gallery-image";
@@ -899,17 +893,6 @@ document.addEventListener(
         ) {
 
             closeImagePreview();
-
-            return;
-
-        }
-
-        if (
-            event.key === "Escape" &&
-            videoPreviewModal?.classList.contains("active")
-        ) {
-
-            closeIntroductionVideo();
 
             return;
 
@@ -1150,9 +1133,12 @@ const contactModal =
 const contactModalClose =
     document.getElementById("contactModalClose");
 
+let lastContactTrigger = null;
 
-function openContactModal() {
 
+function openContactModal(trigger = null) {
+
+    lastContactTrigger = trigger;
     contactModal.classList.add("active");
 
     contactModal.setAttribute(
@@ -1161,6 +1147,8 @@ function openContactModal() {
     );
 
     document.body.style.overflow = "hidden";
+
+    requestAnimationFrame(() => contactModalClose?.focus());
 
 }
 
@@ -1176,6 +1164,9 @@ function closeContactModal() {
 
     document.body.style.overflow = "";
 
+    if (lastContactTrigger && document.contains(lastContactTrigger)) lastContactTrigger.focus();
+    lastContactTrigger = null;
+
 }
 
 
@@ -1187,7 +1178,7 @@ if (contactTrigger) {
 
             event.preventDefault();
 
-            openContactModal();
+            openContactModal(contactTrigger);
 
         }
     );
@@ -1195,13 +1186,12 @@ if (contactTrigger) {
 }
 
 
-contactModalClose.addEventListener(
-    "click",
-    closeContactModal
-);
+if (contactModalClose) {
+    contactModalClose.addEventListener("click", closeContactModal);
+}
 
 
-contactModal.addEventListener(
+if (contactModal) contactModal.addEventListener(
     "click",
     event => {
 
@@ -1243,18 +1233,21 @@ const serviceNameForm = document.getElementById("serviceNameForm");
 const visitorNameInput = document.getElementById("visitorNameInput");
 
 let selectedServiceName = "";
+let lastServiceTrigger = null;
 
-function openServiceNameModal(serviceName) {
+function openServiceNameModal(serviceName, trigger = null) {
 
     if (!serviceNameModal || !serviceNameForm || !visitorNameInput) return;
 
     selectedServiceName = serviceName;
+    lastServiceTrigger = trigger;
 
     const savedName = localStorage.getItem("nexoraVisitorName") || "";
     visitorNameInput.value = savedName;
 
     serviceNameModal.classList.add("active");
     serviceNameModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
 
     requestAnimationFrame(() => {
         visitorNameInput.focus();
@@ -1268,6 +1261,9 @@ function closeServiceNameModal() {
 
     serviceNameModal.classList.remove("active");
     serviceNameModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    if (lastServiceTrigger && document.contains(lastServiceTrigger)) lastServiceTrigger.focus();
+    lastServiceTrigger = null;
     selectedServiceName = "";
 }
 
@@ -1306,7 +1302,7 @@ document.querySelectorAll(".service-row-arrow[data-service]").forEach(arrow => {
         event.preventDefault();
         event.stopPropagation();
 
-        openServiceNameModal(arrow.dataset.service);
+        openServiceNameModal(arrow.dataset.service, arrow);
 
     });
 

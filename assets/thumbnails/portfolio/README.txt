@@ -1,9 +1,9 @@
 Thumbnail designs
 
 Put your images in this folder using these simple names:
-thumb01.png
-thumb02.png
-thumb03.png
+thumb01.webp
+thumb02.webp
+thumb03.webp
 ...
 
 The website is prepared for up to 30 images. Missing numbers are ignored.
