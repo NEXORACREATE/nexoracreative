@@ -3841,3 +3841,123 @@ canvas {
         backface-visibility: hidden;
     }
 }
+
+
+/* ========================================
+   FINAL MEDIA PREVIEW + NAVIGATION HARDENING
+   Targeted fixes only — preserves the existing design.
+======================================== */
+
+/* The hidden attribute must win over the generic video display rule.
+   Without this, the lightbox video can remain visible beside images. */
+.image-lightbox-video[hidden],
+.image-lightbox-image[hidden] {
+    display: none !important;
+}
+
+/* Keep a clicked image fully visible inside the available viewport
+   without stretching or changing its native aspect ratio. */
+.image-lightbox {
+    padding: max(20px, env(safe-area-inset-top))
+             max(20px, env(safe-area-inset-right))
+             max(20px, env(safe-area-inset-bottom))
+             max(20px, env(safe-area-inset-left));
+}
+
+.image-lightbox-inner {
+    min-width: 0;
+    min-height: 0;
+}
+
+.image-lightbox-image {
+    max-width: calc(100vw - 40px);
+    max-height: calc(100vh - 40px);
+    max-height: calc(100svh - 40px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.image-lightbox-video {
+    max-width: calc(100vw - 40px);
+    max-height: calc(100vh - 40px);
+    max-height: calc(100svh - 40px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Make the desktop navigation fluid before it needs to collapse. */
+.nav-container {
+    min-width: 0;
+}
+
+.logo {
+    min-width: 0;
+    max-width: 34%;
+}
+
+.logo-wordmark {
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.nav-links {
+    gap: clamp(14px, 2.2vw, 40px);
+    min-width: 0;
+}
+
+.nav-actions {
+    gap: clamp(8px, 1.2vw, 18px);
+}
+
+.nav-socials {
+    gap: clamp(6px, 0.8vw, 12px);
+}
+
+.nav-button {
+    padding-left: clamp(12px, 1.4vw, 20px);
+    padding-right: clamp(12px, 1.4vw, 20px);
+    white-space: nowrap;
+}
+
+/* Use the existing mobile navigation when the available width becomes
+   too tight, including compact landscape devices. */
+@media (max-width: 1050px),
+       (max-height: 560px) and (orientation: landscape) {
+    .nav-links,
+    .nav-socials {
+        display: none;
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+    }
+
+    .nav-actions {
+        margin-left: auto;
+    }
+
+    .nav-container {
+        gap: 14px;
+    }
+
+    .logo {
+        max-width: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .image-lightbox {
+        padding: max(15px, env(safe-area-inset-top))
+                 max(15px, env(safe-area-inset-right))
+                 max(15px, env(safe-area-inset-bottom))
+                 max(15px, env(safe-area-inset-left));
+    }
+
+    .image-lightbox-image,
+    .image-lightbox-video {
+        max-width: calc(100vw - 30px);
+        max-height: calc(100svh - 30px);
+    }
+}
