@@ -4253,3 +4253,206 @@ canvas {
         font-size: 20px;
     }
 }
+
+
+/* ========================================
+   FINAL MOBILE / TABLET REFINEMENTS
+   Requested: mobile/tablet navigation order,
+   always-visible work labels, consistent SVG
+   arrows, two-column services, smaller portrait.
+======================================== */
+
+/* The folder arrow is an SVG, matching the site's
+   existing service-arrow treatment instead of a text glyph. */
+.folder-arrow svg {
+    width: 19px;
+    height: 19px;
+    display: block;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.45;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+@media (max-width: 1050px),
+       (max-height: 560px) and (orientation: landscape) {
+
+    /* Non-desktop header order: logo → Let's Talk → three lines. */
+    .nav-actions {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav-socials,
+    .nav-links {
+        display: none !important;
+    }
+
+    .nav-button {
+        order: 1;
+    }
+
+    .mobile-menu-toggle {
+        order: 2;
+        display: flex;
+    }
+
+    /* Collection cards: never depend on hover/touch to reveal text. */
+    .work-image-placeholder .work-thumbnail-overlay,
+    .work-image-placeholder:hover .work-thumbnail-overlay {
+        opacity: 1;
+    }
+
+    .work-thumbnail-overlay {
+        background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.02) 18%,
+            rgba(0, 0, 0, 0.76) 100%
+        );
+    }
+
+    /* Keep the arrow in the same visual language as the desktop site. */
+    .folder-arrow {
+        font-size: 0;
+    }
+
+    .folder-arrow svg {
+        width: 19px;
+        height: 19px;
+    }
+
+    /* Two service columns on every non-desktop screen. */
+    .services-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 28px;
+    }
+
+    .service-row {
+        grid-template-columns: 30px minmax(0, 1fr) 40px;
+        gap: 12px;
+        min-width: 0;
+        padding: 26px 0;
+    }
+
+    .service-row-arrow {
+        display: flex;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Preserve the desktop portrait's visual treatment, but scale it down
+       so it doesn't dominate a tablet/phone viewport. */
+    .about-portrait-wrap {
+        width: min(100%, 360px);
+        max-width: 360px;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .nav-container {
+        gap: 10px;
+    }
+
+    .logo {
+        max-width: none;
+        flex: 1 1 auto;
+    }
+
+    .nav-actions {
+        flex: 0 0 auto;
+        gap: 8px;
+    }
+
+    .nav-button {
+        min-height: 40px;
+        padding: 9px 13px;
+        font-size: 10px;
+    }
+
+    .mobile-menu-toggle {
+        width: 40px;
+        height: 40px;
+    }
+
+    .services-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 18px;
+    }
+
+    .service-row {
+        grid-template-columns: 22px minmax(0, 1fr) 32px;
+        gap: 7px;
+        padding: 22px 0;
+    }
+
+    .service-row-number {
+        font-size: 9px;
+    }
+
+    .service-row-content h3 {
+        font-size: clamp(15px, 4.3vw, 20px);
+        line-height: 1.08;
+        letter-spacing: -0.5px;
+    }
+
+    .service-row-content p {
+        font-size: 10px;
+        line-height: 1.55;
+    }
+
+    .service-row-arrow {
+        width: 32px;
+        height: 32px;
+    }
+
+    .service-arrow-icon {
+        width: 15px;
+        height: 15px;
+    }
+
+    .about-portrait-wrap {
+        width: min(76vw, 300px);
+        max-width: 300px;
+        margin-top: 18px;
+    }
+
+    .about-portrait {
+        border-radius: 16px;
+    }
+}
+
+@media (max-width: 380px) {
+    .services-list {
+        column-gap: 12px;
+    }
+
+    .service-row {
+        grid-template-columns: 18px minmax(0, 1fr) 28px;
+        gap: 5px;
+    }
+
+    .service-row-content h3 {
+        font-size: 14px;
+    }
+
+    .service-row-content p {
+        font-size: 9px;
+    }
+
+    .service-row-arrow {
+        width: 28px;
+        height: 28px;
+    }
+
+    .about-portrait-wrap {
+        width: min(72vw, 270px);
+        max-width: 270px;
+    }
+}
