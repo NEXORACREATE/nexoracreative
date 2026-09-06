@@ -28,8 +28,9 @@ function getFramePath(index) {
 
 const images = Array.from({ length: frameCount }, () => null);
 let nextFrameToLoad = 0;
-const initialFrameBatch = 10;
-const frameLoadConcurrency = 8;
+const isMobileViewport = window.matchMedia("(max-width: 600px)").matches;
+const initialFrameBatch = isMobileViewport ? 6 : 10;
+const frameLoadConcurrency = isMobileViewport ? 4 : 8;
 let activeFrameLoads = 0;
 
 function createFrameImage(index) {
