@@ -1179,7 +1179,7 @@ if (contactTrigger) {
 
             event.preventDefault();
 
-            openContactModal(contactTrigger);
+            openServiceNameModal("", contactTrigger);
 
         }
     );
@@ -1232,6 +1232,10 @@ const serviceNameModal = document.getElementById("serviceNameModal");
 const serviceNameModalClose = document.getElementById("serviceNameModalClose");
 const serviceNameForm = document.getElementById("serviceNameForm");
 const visitorNameInput = document.getElementById("visitorNameInput");
+const projectServiceSelect = document.getElementById("projectServiceSelect");
+const projectBudgetSelect = document.getElementById("projectBudgetSelect");
+const projectTimelineSelect = document.getElementById("projectTimelineSelect");
+const projectDetailsInput = document.getElementById("projectDetailsInput");
 
 let selectedServiceName = "";
 let lastServiceTrigger = null;
@@ -1243,8 +1247,16 @@ function openServiceNameModal(serviceName, trigger = null) {
     selectedServiceName = serviceName;
     lastServiceTrigger = trigger;
 
-    const savedName = localStorage.getItem("nexoraVisitorName") || "";
+    let savedName = "";
+    try { savedName = localStorage.getItem("nexoraVisitorName") || ""; } catch (e) {}
     visitorNameInput.value = savedName;
+
+    // Pre-select the service when opened from a service row; otherwise start blank
+    projectServiceSelect.value = "";
+    if (serviceName) projectServiceSelect.value = serviceName;
+    projectBudgetSelect.value = "";
+    projectTimelineSelect.value = "";
+    projectDetailsInput.value = "";
 
     serviceNameModal.classList.add("active");
     serviceNameModal.setAttribute("aria-hidden", "false");
@@ -1252,7 +1264,12 @@ function openServiceNameModal(serviceName, trigger = null) {
 
     requestAnimationFrame(() => {
         visitorNameInput.focus();
-        visitorNameInput.select();
+        if (savedName) {
+            // Name already known: jump to the first empty field
+            (serviceName ? projectBudgetSelect : projectServiceSelect).focus();
+        } else {
+            visitorNameInput.select();
+        }
     });
 }
 
@@ -1272,19 +1289,28 @@ function continueToServiceWhatsApp(event) {
 
     event.preventDefault();
 
+    if (!serviceNameForm.reportValidity()) return;
+
     const visitorName = visitorNameInput.value.trim();
+    selectedServiceName = projectServiceSelect.value;
 
     if (!visitorName || !selectedServiceName) {
         visitorNameInput.focus();
         return;
     }
 
-    localStorage.setItem("nexoraVisitorName", visitorName);
+    try { localStorage.setItem("nexoraVisitorName", visitorName); } catch (e) {}
+
+    const details = projectDetailsInput.value.trim();
 
     const message =
-        `Hi Nexora Creative! I have seen your portfolio and it is great and good. ` +
-        `I want ${selectedServiceName} service from you. Can you please reach me out to ` +
-        `discuss about doing the work together? Looking forward to you... That's ${visitorName}.`;
+        `Hi Nexora Creative! I found your portfolio and I have a project.\n\n` +
+        `Name: ${visitorName}\n` +
+        `Service: ${selectedServiceName}\n` +
+        `Budget: ${projectBudgetSelect.value.trim()}\n` +
+        `Deadline: ${projectTimelineSelect.value}\n` +
+        (details ? `Details: ${details}\n` : "") +
+        `\nPlease let me know if you are available to work on this.`;
 
     const whatsappUrl =
         `https://wa.me/${serviceWhatsappNumber}?text=${encodeURIComponent(message)}`;

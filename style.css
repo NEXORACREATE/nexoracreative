@@ -4456,3 +4456,209 @@ canvas {
         max-width: 270px;
     }
 }
+
+
+/* ========================================
+   UPDATE: HERO AUDIENCE LINE
+======================================== */
+
+.hero-content .hero-audience {
+    margin-bottom: 26px;
+    color: #777777;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 1.8;
+}
+
+
+/* ========================================
+   UPDATE: PROCESS SECTION
+======================================== */
+
+.process-section .services-header {
+    margin-bottom: 64px;
+}
+
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.process-step {
+    position: relative;
+    padding: 36px 28px 40px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.process-step + .process-step {
+    padding-left: 28px;
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.process-step span {
+    display: block;
+    margin-bottom: 28px;
+    color: #5f5f5f;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+.process-step h3 {
+    margin-bottom: 14px;
+    font-family: "Poppins", sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.process-step p {
+    max-width: 280px;
+    color: #8a8a8a;
+    font-size: 14px;
+    line-height: 1.75;
+}
+
+@media (max-width: 900px) {
+    .process-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .process-step,
+    .process-step + .process-step {
+        padding: 30px 20px 34px 0;
+        border-left: 0;
+    }
+
+    .process-step:nth-child(even) {
+        padding-left: 20px;
+        border-left: 1px solid rgba(255, 255, 255, 0.15);
+    }
+}
+
+@media (max-width: 560px) {
+    .process-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .process-step,
+    .process-step:nth-child(even) {
+        padding: 26px 0 30px;
+        border-left: 0;
+    }
+}
+
+
+/* ========================================
+   UPDATE: PROJECT BRIEF FORM
+======================================== */
+
+.service-name-modal {
+    align-items: flex-start;
+    overflow-y: auto;
+}
+
+.service-name-modal-inner {
+    margin: auto;
+}
+
+.service-name-modal-inner h2 {
+    font-size: clamp(26px, 4vw, 38px);
+    letter-spacing: -1.5px;
+}
+
+.service-name-modal-inner p {
+    margin-bottom: 22px;
+}
+
+.service-name-form select,
+.service-name-form textarea {
+    width: 100%;
+    padding: 0 18px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 0;
+    outline: none;
+    background: #151515;
+    color: #ffffff;
+    font: inherit;
+    font-size: 15px;
+    transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.service-name-form select {
+    min-height: 54px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, #777777 50%),
+                      linear-gradient(135deg, #777777 50%, transparent 50%);
+    background-position: calc(100% - 22px) 24px, calc(100% - 16px) 24px;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.service-name-form select:invalid {
+    color: #5f5f5f;
+}
+
+.service-name-form select option {
+    background: #151515;
+    color: #ffffff;
+}
+
+.service-name-form textarea {
+    padding: 14px 18px;
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.6;
+}
+
+.service-name-form textarea::placeholder {
+    color: #5f5f5f;
+}
+
+.service-name-form select:focus,
+.service-name-form textarea:focus {
+    border-color: rgba(255, 255, 255, 0.55);
+    background-color: #191919;
+}
+
+.service-name-form label {
+    margin-top: 6px;
+}
+
+.service-name-form label em {
+    color: #5f5f5f;
+    font-style: normal;
+}
+
+.service-name-form input {
+    min-height: 54px;
+}
+
+.service-name-email {
+    margin-top: 6px;
+    text-align: center;
+    color: #777777;
+    font-size: 12px;
+    transition: color 0.25s ease;
+}
+
+.service-name-email:hover {
+    color: #ffffff;
+}
+
+@media (max-width: 600px) {
+    .service-name-modal-inner {
+        padding: 54px 20px 24px;
+    }
+}
+
+
+.service-name-form .form-hint {
+    margin-top: -2px;
+    color: #5f5f5f;
+    font-size: 12px;
+}
